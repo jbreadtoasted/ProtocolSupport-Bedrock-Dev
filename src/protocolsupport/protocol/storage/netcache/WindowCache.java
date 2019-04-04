@@ -23,7 +23,6 @@ public class WindowCache {
 		return windowType;
 	}
 
-
 	public boolean isValidWindowId(int windowId) {
 		return windowId == this.windowId;
 	}
