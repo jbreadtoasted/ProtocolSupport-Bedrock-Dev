@@ -1,7 +1,9 @@
 package protocolsupport.protocol.packet.middleimpl.clientbound.play.v_pe;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 import protocolsupport.api.ProtocolVersion;
 import protocolsupport.listeners.InternalPluginMessageRequest;
@@ -9,8 +11,10 @@ import protocolsupport.listeners.internal.ChunkUpdateRequest;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.clientbound.play.MiddleChunk;
 import protocolsupport.protocol.packet.middleimpl.ClientBoundPacketData;
+import protocolsupport.protocol.pipeline.version.v_pe.PEPacketEncoder;
 import protocolsupport.protocol.serializer.ArraySerializer;
 import protocolsupport.protocol.serializer.ItemStackSerializer;
+import protocolsupport.protocol.serializer.MiscSerializer;
 import protocolsupport.protocol.serializer.PositionSerializer;
 import protocolsupport.protocol.serializer.VarNumberSerializer;
 import protocolsupport.protocol.typeremapper.tile.TileEntityRemapper;
@@ -55,9 +59,6 @@ public class Chunk extends MiddleChunk {
 					ItemStackSerializer.writeTag(chunkdata, true, version, tile.getNBT());
 				}
 			});
-			//TODO: find a way to calculate chunk publisher coords from chunk coords
-			Location playerLocation = connection.getPlayer().getLocation();
-			packets.add(Chunk.createChunkPublisherUpdate(playerLocation.getBlockX(), playerLocation.getBlockY(), playerLocation.getBlockZ()));
 			packets.add(chunkpacket);
 			return packets;
 		} else { //Request a full chunk.
@@ -74,20 +75,28 @@ public class Chunk extends MiddleChunk {
 		}
 	}
 
+	public static void writeEmptyChunk(ByteBuf out, ChunkCoord chunk) {
+		PositionSerializer.writePEChunkCoord(out, chunk);
+		out.writeBytes(EmptyChunk.getPEChunkData());
+	}
+
 	public static ClientBoundPacketData createEmptyChunk(ChunkCoord chunk) {
 		ClientBoundPacketData serializer = ClientBoundPacketData.create(PEPacketIDs.CHUNK_DATA);
-		PositionSerializer.writePEChunkCoord(serializer, chunk);
-		serializer.writeBytes(EmptyChunk.getPEChunkData());
+		writeEmptyChunk(serializer, chunk);
 		return serializer;
+	}
+
+	public static void writeChunkPublisherUpdate(ByteBuf out, int x, int y, int z) {
+		VarNumberSerializer.writeSVarInt(out, x);
+		VarNumberSerializer.writeVarInt(out, y);
+		VarNumberSerializer.writeSVarInt(out, z);
+		// TODO: client view distance
+		VarNumberSerializer.writeVarInt(out, (Bukkit.getViewDistance() + 1) * 16);
 	}
 
 	public static ClientBoundPacketData createChunkPublisherUpdate(int x, int y, int z) {
 		ClientBoundPacketData networkChunkUpdate = ClientBoundPacketData.create(PEPacketIDs.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET);
-		VarNumberSerializer.writeSVarInt(networkChunkUpdate, x);
-		VarNumberSerializer.writeVarInt(networkChunkUpdate, y);
-		VarNumberSerializer.writeSVarInt(networkChunkUpdate, z);
-		// TODO: client view distance
-		VarNumberSerializer.writeVarInt(networkChunkUpdate, Bukkit.getViewDistance() * 16);
+		writeChunkPublisherUpdate(networkChunkUpdate, x, y, z);
 		return networkChunkUpdate;
 	}
 
