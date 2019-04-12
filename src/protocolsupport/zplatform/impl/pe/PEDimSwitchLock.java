@@ -4,13 +4,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.util.ReferenceCountUtil;
 
 import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe.PlayerAction;
 import protocolsupport.protocol.pipeline.version.v_pe.PEPacketDecoder;
 import protocolsupport.protocol.typeremapper.pe.PEPacketIDs;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 //lock outbound packet stream until we get a dim switch ack
 public class PEDimSwitchLock extends ChannelDuplexHandler {
@@ -19,18 +21,22 @@ public class PEDimSwitchLock extends ChannelDuplexHandler {
 
 	protected static int MAX_QUEUE_SIZE = 4096;
 
-	protected final ArrayList<ByteBuf> queue = new ArrayList<>(128);
+	protected final Queue<ByteBuf> queue = new ArrayDeque<>(32);
 	protected boolean isLocked = false;
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		super.channelUnregistered(ctx);
+		queue.forEach(ReferenceCountUtil::safeRelease);
+		queue.clear();
+	}
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof ByteBuf && isLocked && PlayerAction.isDimSwitchAck((ByteBuf) msg)) {
-			final ArrayList<ByteBuf> qCopy = new ArrayList(queue);
-			queue.clear();
-			queue.trimToSize();
 			isLocked = false;
-			for (ByteBuf data : qCopy) {
-				write(ctx, data, ctx.voidPromise());
+			while (!queue.isEmpty() && !isLocked) {
+				write(ctx, queue.remove(), ctx.voidPromise());
 			}
 			ctx.flush();
 		}
