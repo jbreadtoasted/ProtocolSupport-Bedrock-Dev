@@ -3,7 +3,6 @@ package protocolsupport.protocol.packet.middleimpl.serverbound.play.v_pe;
 import org.bukkit.util.Vector;
 
 import io.netty.buffer.ByteBuf;
-import protocolsupport.ProtocolSupport;
 import protocolsupport.protocol.ConnectionImpl;
 import protocolsupport.protocol.packet.middle.ServerBoundMiddlePacket;
 import protocolsupport.protocol.packet.middle.serverbound.play.MiddleUseEntity;
@@ -16,8 +15,6 @@ import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.UsedHand;
 import protocolsupport.utils.recyclable.RecyclableArrayList;
 import protocolsupport.utils.recyclable.RecyclableCollection;
-
-import java.text.MessageFormat;
 
 public class UseEntity extends ServerBoundMiddlePacket {
 
@@ -55,7 +52,6 @@ public class UseEntity extends ServerBoundMiddlePacket {
 		RecyclableArrayList<ServerBoundPacketData> packets = RecyclableArrayList.create();
 		switch (subTypeId) {
 			case INTERACT_INTERACT: {
-				ProtocolSupport.logInfo("Interact packet type: INTERACT_INTERACT");
 				NetworkEntity target = cache.getWatchedEntityCache().getWatchedEntity(targetId);
 				//TODO both armor stands?
 				if ((target == null) || !target.getType().isOfType(NetworkEntityType.ARMOR_STAND_MOB)) {
@@ -65,17 +61,12 @@ public class UseEntity extends ServerBoundMiddlePacket {
 				break;
 			}
 			case INTERACT_ATTACK: {
-				ProtocolSupport.logInfo("Interact packet type: INTERACT_ATTACK");
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.ATTACK, null, UsedHand.MAIN));
 				break;
 			}
 			case INTERACT_AT: {
-				ProtocolSupport.logInfo("Interact packet type: INTERACT_AT");
 				packets.add(MiddleUseEntity.create(targetId, MiddleUseEntity.Action.INTERACT_AT, new Vector(cX, cY, cZ), UsedHand.MAIN));
 				break;
-			}
-			default: {
-				ProtocolSupport.logInfo(MessageFormat.format("UNHANDLED PE INTERACT SUBTYPE: {0}", subTypeId));
 			}
 		}
 		return packets;
