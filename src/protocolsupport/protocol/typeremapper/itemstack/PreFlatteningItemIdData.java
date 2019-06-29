@@ -46,10 +46,6 @@ public class PreFlatteningItemIdData {
 		return legacyId & 0xFFFF;
 	}
 
-	public static int getModernIdByLegacyCombinedId(int legacyCombinedId) {
-		return fromLegacyId.get(legacyCombinedId);
-	}
-
 	public static int getModernIdByLegacyIdData(int legacyId, int data) {
 		return fromLegacyId.getOrDefault(formLegacyCombinedId(legacyId, data), fromLegacyId.getOrDefault(formLegacyCombinedId(legacyId, 0), combinedLegacyStoneId));
 	}

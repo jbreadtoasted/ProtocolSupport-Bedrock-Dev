@@ -26,8 +26,8 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 	protected double x;
 	protected double y;
 	protected double z;
-	protected byte pitch;
-	protected byte yaw;
+	protected int pitch;
+	protected int yaw;
 	protected int objectdata;
 	protected int motX;
 	protected int motY;
@@ -41,8 +41,8 @@ public abstract class MiddleSpawnObject extends ClientBoundMiddlePacket {
 		x = serverdata.readDouble();
 		y = serverdata.readDouble();
 		z = serverdata.readDouble();
-		pitch = serverdata.readByte();
-		yaw = serverdata.readByte();
+		pitch = serverdata.readUnsignedByte();
+		yaw = serverdata.readUnsignedByte();
 		objectdata = serverdata.readInt();
 		motX = serverdata.readShort();
 		motY = serverdata.readShort();

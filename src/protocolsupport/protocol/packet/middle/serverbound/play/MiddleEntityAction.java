@@ -34,7 +34,7 @@ public abstract class MiddleEntityAction extends ServerBoundMiddlePacket {
 		return creator;
 	}
 
-	public static enum Action {
+	protected static enum Action {
 		START_SNEAK, STOP_SNEAK, LEAVE_BED, START_SPRINT, STOP_SPRINT, START_JUMP, STOP_JUMP, OPEN_HORSE_INV, START_ELYTRA_FLY;
 		public static final EnumConstantLookups.EnumConstantLookup<Action> CONSTANT_LOOKUP = new EnumConstantLookups.EnumConstantLookup<>(Action.class);
 	}

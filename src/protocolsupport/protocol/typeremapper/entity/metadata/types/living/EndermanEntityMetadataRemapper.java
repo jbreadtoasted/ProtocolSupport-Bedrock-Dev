@@ -22,16 +22,6 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 public class EndermanEntityMetadataRemapper extends InsentientEntityMetadataRemapper {
 
 	public EndermanEntityMetadataRemapper() {
-		//TODO: Remap this.
-//		addRemap(new DataWatcherObjectRemapper() {
-//		@Override
-//		public void remap(NetworkEntity entity, ArrayMap<DataWatcherObject<?>> original, ArrayMap<DataWatcherObject<?>> remapped) {
-//			DataWatcherObjectIndex.Enderman.CARRIED_BLOCK.getValue(original).ifPresent(stateWatcher -> {
-//				remapped.put(PeMetaBase.ENDERMAN_BLOCK, new DataWatcherObjectShortLe((short) MinecraftData.getBlockIdFromState(stateWatcher.getValue())));
-//			});
-//		}
-//	}, ProtocolVersionsHelper.ALL_PE),
-
 		addRemap(new IndexValueRemapperNoOp(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12), ProtocolVersionsHelper.UP_1_13);
 		addRemapPerVersion(version -> new IndexValueRemapper<DataWatcherObjectBlockData>(DataWatcherObjectIndex.Enderman.CARRIED_BLOCK, 12) {
 			final ArrayBasedIdRemappingTable blockDataRemappingTable = LegacyBlockData.REGISTRY.getTable(version);

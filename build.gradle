@@ -28,11 +28,9 @@ tasks.withType(AbstractCompile) {
 
 
 group 'protocolsupport'
-version '4.29-dev-pe'
-
+version '4.29-dev'
 sourceCompatibility = JavaVersion.VERSION_1_8
 
-import java.text.MessageFormat
 
 File librariesRuntimeDirectory = new File("libraries_runtime")
 File librariesShadeDirectory = new File("libraries_shade")
@@ -65,10 +63,7 @@ task updateRuntimeLibraries(type: UpdateLibrariesTask) {
 
 task updateShadeLibraries(type: UpdateLibrariesTask) {
 	directory = librariesShadeDirectory
-	libraries = [
-		[name: 'raknetserver-30.jar', url: 'https://build.true-games.org/job/RakNetServer/30/artifact/target/RakNetServer.jar'],
-		[name: 'udpserver-11.jar', url: 'https://build.true-games.org/job/UdpServerSocketChannel/11/artifact/target/UdpServerSocketChannel.jar']
-	]
+	libraries = []
 }
 
 
@@ -91,23 +86,16 @@ sourceSets {
 repositories {
 	mavenCentral()
 	jcenter()
-	flatDir {
-		dirs 'libraries_shade', 'libraries_runtime', 'processors'
-	}
 }
 
 dependencies {
-	shadow ":spigot-1.13.2-3"
-	compile ":spigot-1.13.2-3"
-	compile ":raknetserver-30"
-	compile ":udpserver-11"
+	shadow fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
+	compile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
 	compile group: 'it.unimi.dsi', name: 'fastutil', version: '8.2.2'
 	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-	compile group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '5.2'
-	compile ":ProtocolSupportBuildProcessor"
-	annotationProcessor ":ProtocolSupportBuildProcessor"
-	shadow ":ProtocolSupportBuildProcessor"
+	annotationProcessor fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
+	shadow fileTree(dir: annotationProcessorsDirectory, include: '*.jar')
 	testCompile fileTree(dir: librariesRuntimeDirectory, include: '*.jar')
 	testCompile fileTree(dir: librariesShadeDirectory, include: '*.jar')
 	testCompile 'org.junit.jupiter:junit-jupiter-api:5.2.0'
@@ -168,12 +156,6 @@ shadowJar {
 	relocate 'org.apache', 'protocolsupport.libs.org.apache'
 	relocate 'it.unimi.dsi.fastutil', 'protocolsupport.libs.it.unimi.dsi.fastutil'
 	relocate 'com.google.gson', 'protocolsupport.libs.com.google.gson'
-	relocate 'com.nimbusds', 'protocolsupport.libs.com.nimbusds'
-	relocate 'org.objectweb', 'protocolsupport.libs.org.objectweb'
-	relocate 'net.minidev', 'protocolsupport.libs.net.minidev'
-	relocate 'net.jcip', 'protocolsupport.libs.net.jcip'
-	relocate 'raknetserver', 'protocolsupport.libs.raknetserver'
-	relocate 'udpserversocketchannel', 'protocolsupport.libs.udpserversocketchannel'
 }
 
 task copyFinalJarToTarget(type: DefaultTask) {doLast{

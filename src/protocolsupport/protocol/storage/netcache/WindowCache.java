@@ -7,16 +7,12 @@ public class WindowCache {
 
 	protected static final int WINDOW_ID_PLAYER = 0;
 
-	private WindowType windowType = WindowType.PLAYER;
-	private int windowId = WINDOW_ID_PLAYER;
-	private int windowSlots = 46;
-	private int horseId = -1;
+	protected WindowType windowType = WindowType.PLAYER;
+	protected int windowId = WINDOW_ID_PLAYER;
 
-	public void setOpenedWindow(WindowType windowType, int windowId, int slots, int horseId) {
-		this.windowType = windowType;
+	public void setOpenedWindow(int windowId, WindowType windowType) {
 		this.windowId = windowId;
-		this.windowSlots = slots;
-		this.horseId = horseId;
+		this.windowType = windowType;
 	}
 
 	public WindowType getOpenedWindow() {
@@ -27,23 +23,9 @@ public class WindowCache {
 		return windowId == this.windowId;
 	}
 
-	public int getOpenedWindowId() {
-		return this.windowId;
-	}
-
-	public int getOpenedWindowSlots() {
-		return this.windowSlots;
-	}
-
-	public int getHorseId() {
-		return horseId;
-	}
-
 	public void closeWindow() {
 		this.windowId = WINDOW_ID_PLAYER;
 		this.windowType = WindowType.PLAYER;
-		this.windowId = 0;
-		this.windowSlots = 46;
 	}
 
 	@Override

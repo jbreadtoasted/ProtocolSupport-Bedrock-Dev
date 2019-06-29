@@ -83,11 +83,4 @@ public class NBTCompound extends NBT {
 		return tags.hashCode();
 	}
 
-	@Override
-	public NBTCompound clone() {
-		NBTCompound newCompound = new NBTCompound();
-		tags.forEach((k, v) -> newCompound.setTag(k, v.clone()));
-		return newCompound;
-	}
-
 }

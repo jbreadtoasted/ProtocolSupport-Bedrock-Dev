@@ -15,18 +15,6 @@ public class PositionSerializer {
 		return new Position((int) (l >> 38), (int) ((l >> 26) & 0xFFFL), (int) ((l << 38) >> 38));
 	}
 
-	public static void readPEPositionTo(ByteBuf from, Position to) {
-		to.setX(VarNumberSerializer.readSVarInt(from));
-		to.setY(VarNumberSerializer.readVarInt(from));
-		to.setZ(VarNumberSerializer.readSVarInt(from));
-	}
-
-	public static void readPEPosition(ByteBuf from) {
-		VarNumberSerializer.readSVarInt(from);
-		VarNumberSerializer.readVarInt(from);
-		VarNumberSerializer.readSVarInt(from);
-	}
-
 	public static void readPositionTo(ByteBuf from, Position to) {
 		long l = from.readLong();
 		to.setX((int) (l >> 38));
@@ -60,12 +48,6 @@ public class PositionSerializer {
 		to.writeLong(((position.getX() & 0x3FFFFFFL) << 38) | ((position.getY() & 0xFFFL) << 26) | (position.getZ() & 0x3FFFFFFL));
 	}
 
-	public static void writePEPosition(ByteBuf to, Position position) {
-		VarNumberSerializer.writeSVarInt(to, position.getX());
-		VarNumberSerializer.writeVarInt(to, position.getY());
-		VarNumberSerializer.writeSVarInt(to, position.getZ());
-	}
-
 	public static void writeLegacyPositionB(ByteBuf to, Position position) {
 		to.writeInt(position.getX());
 		to.writeByte(position.getY());
@@ -84,6 +66,8 @@ public class PositionSerializer {
 		to.writeInt(position.getZ());
 	}
 
+
+
 	public static ChunkCoord readChunkCoord(ByteBuf from) {
 		return new ChunkCoord(from.readInt(), from.readInt());
 	}
@@ -91,23 +75,6 @@ public class PositionSerializer {
 	public static void writeChunkCoord(ByteBuf to, ChunkCoord chunk) {
 		to.writeInt(chunk.getX());
 		to.writeInt(chunk.getZ());
-	}
-
-	public static ChunkCoord readPEChunkCoord(ByteBuf from) {
-		return new ChunkCoord(VarNumberSerializer.readSVarInt(from), VarNumberSerializer.readSVarInt(from));
-	}
-
-	public static void writePEChunkCoord(ByteBuf to, ChunkCoord chunk) {
-		VarNumberSerializer.writeSVarInt(to, chunk.getX());
-		VarNumberSerializer.writeSVarInt(to, chunk.getZ());
-	}
-
-	public static int readLocalCoord(ByteBuf from) {
-		return from.readUnsignedShort();
-	}
-
-	public static void writeLocalCoord(ByteBuf to, int coord) {
-		to.writeShort(coord);
 	}
 
 }

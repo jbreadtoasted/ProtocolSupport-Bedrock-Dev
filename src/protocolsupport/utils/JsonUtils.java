@@ -78,20 +78,6 @@ public class JsonUtils {
 		throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
 	}
 
-	public static short getAsShort(JsonElement jsonElement, String s) {
-		if (jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isNumber()) {
-			return jsonElement.getAsShort();
-		}
-		throw new JsonSyntaxException("Expected " + s + " to be a Int, was " + toString(jsonElement));
-	}
-
-	public static short getShort(JsonObject jsonObject, String s) {
-		if (jsonObject.has(s)) {
-			return getAsShort(jsonObject.get(s), s);
-		}
-		throw new JsonSyntaxException("Missing " + s + ", expected to find a Int");
-	}
-
 	public static JsonObject getJsonObject(JsonObject jsonObject, String name) {
 		if (jsonObject.has(name)) {
 			return getAsJsonObject(jsonObject.get(name), name);

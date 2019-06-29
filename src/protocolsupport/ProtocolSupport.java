@@ -10,16 +10,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import protocolsupport.commands.CommandHandler;
 import protocolsupport.listeners.FeatureEmulation;
-import protocolsupport.listeners.InternalPluginMessageRequest;
 import protocolsupport.listeners.LocaleUseLoader;
 import protocolsupport.listeners.MultiplePassengersRestrict;
 import protocolsupport.listeners.ReloadCommandBlocker;
 import protocolsupport.utils.ResourceUtils;
 import protocolsupport.utils.Utils;
 import protocolsupport.zplatform.ServerPlatform;
-import protocolsupport.zplatform.impl.pe.PEChunkPublisher;
-import protocolsupport.zplatform.impl.pe.PECreativeInventory;
-import protocolsupport.zplatform.impl.pe.PEProxyServer;
 
 public class ProtocolSupport extends JavaPlugin {
 
@@ -38,15 +34,6 @@ public class ProtocolSupport extends JavaPlugin {
 
 	public BuildInfo getBuildInfo() {
 		return buildinfo;
-	}
-
-	private PEProxyServer peserver;
-
-	// Set to true to enable detailed packet debugging
-	private boolean packetDebugging = false;
-
-	public static boolean isPacketDebugging() {
-		return getInstance().packetDebugging;
 	}
 
 	@Override
@@ -91,12 +78,6 @@ public class ProtocolSupport extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FeatureEmulation(), this);
 		getServer().getPluginManager().registerEvents(new ReloadCommandBlocker(), this);
 		getServer().getPluginManager().registerEvents(new MultiplePassengersRestrict(), this);
-		getServer().getPluginManager().registerEvents(new PEChunkPublisher(), this);
-		getServer().getMessenger().registerIncomingPluginChannel(this, InternalPluginMessageRequest.TAG, new InternalPluginMessageRequest());
-		getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-			PECreativeInventory.getInstance().generateCreativeInventoryItems();
-			(peserver = new PEProxyServer()).start();
-		});
 		getServer().getPluginManager().registerEvents(new LocaleUseLoader(), this);
 	}
 
@@ -104,13 +85,6 @@ public class ProtocolSupport extends JavaPlugin {
 	public void onDisable() {
 		Bukkit.shutdown();
 		ServerPlatform.get().getInjector().onDisable();
-		if (peserver != null) {
-			peserver.stop();
-		}
-	}
-
-	public static void logTrace(String message) {
-		ProtocolSupport.getInstance().getLogger().fine(message);
 	}
 
 	public static void logInfo(String message) {

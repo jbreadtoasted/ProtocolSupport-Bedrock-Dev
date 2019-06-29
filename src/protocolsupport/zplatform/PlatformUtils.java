@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.CachedServerIcon;
 
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
 import protocolsupport.protocol.packet.handler.AbstractHandshakeListener;
 import protocolsupport.protocol.pipeline.IPacketPrepender;
 import protocolsupport.protocol.pipeline.IPacketSplitter;
@@ -49,8 +48,6 @@ public interface PlatformUtils {
 
 	public String getOutdatedServerMessage();
 
-	public String getOutdatedClientMessage();
-
 	public boolean isRunning();
 
 	public boolean isProxyEnabled();
@@ -82,8 +79,6 @@ public interface PlatformUtils {
 	public void enableEncryption(ChannelPipeline pipeline, SecretKey key, boolean fullEncryption);
 
 	public void setFraming(ChannelPipeline pipeline, IPacketSplitter splitter, IPacketPrepender prepender);
-
-	public EventLoopGroup getServerEventLoop();
 
 	public AbstractHandshakeListener createHandshakeListener(NetworkManagerWrapper networkmanager);
 

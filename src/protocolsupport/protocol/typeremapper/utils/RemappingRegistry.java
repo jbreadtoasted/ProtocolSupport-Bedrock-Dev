@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 
 import protocolsupport.api.ProtocolVersion;
-import protocolsupport.api.ProtocolType;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.EnumRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.GenericRemappingTable;
 import protocolsupport.protocol.typeremapper.utils.RemappingTable.IdRemappingTable;
@@ -55,9 +54,6 @@ public abstract class RemappingRegistry<T extends RemappingTable> {
 
 		public void registerRemapEntry(T from, T to, ProtocolVersion... versions) {
 			for (ProtocolVersion version : versions) {
-				if (getTable(version).hasRemap(from) && version.getProtocolType() == ProtocolType.PE) {
-					System.out.println("DUPLICATE REMAP: " + from + " for version " + version);
-				}
 				getTable(version).setRemap(from, to);
 			}
 		}

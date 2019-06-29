@@ -30,8 +30,8 @@ import protocolsupport.utils.CollectionsUtils.ArrayMap;
 
 public class DataWatcherSerializer {
 
-	//while meta indexes can be now up to 255, we only use up to this amount for PE and PC
-	public static final int MAX_USED_META_INDEX = 100;
+	//while meta indexes can be now up to 255, we actually use up to 31
+	public static final int MAX_USED_META_INDEX = 31;
 
 	@SuppressWarnings("unchecked")
 	private static final Supplier<? extends ReadableDataWatcherObject<?>>[] registry = new Supplier[256];
@@ -110,28 +110,6 @@ public class DataWatcherSerializer {
 			to.writeByte(0);
 		}
 		to.writeByte(127);
-	}
-
-	public static void writePEData(ByteBuf to, ProtocolVersion version, String locale, ArrayMap<DataWatcherObject<?>> peMetadata) {
-		int entries = 0;
-		int writerPreIndex = to.writerIndex();
-		//Fake fixed-varint length.
-		to.writeZero(VarNumberSerializer.MAX_LENGTH);
-		for (int key = peMetadata.getMinKey(); key < peMetadata.getMaxKey(); key++) {
-			DataWatcherObject<?> object = peMetadata.get(key);
-			if (object != null) {
-				VarNumberSerializer.writeVarInt(to, key);
-				VarNumberSerializer.writeVarInt(to, DataWatcherObjectIdRegistry.getTypeId(object, version));
-				object.writeToStream(to, version, locale);
-				entries++;
-			}
-		}
-		int writerPostIndex = to.writerIndex();
-		//Overwrite fake length.
-		to.writerIndex(writerPreIndex);
-		VarNumberSerializer.writeFixedSizeVarInt(to, entries);
-		//Return writer.
-		to.writerIndex(writerPostIndex);
 	}
 
 }

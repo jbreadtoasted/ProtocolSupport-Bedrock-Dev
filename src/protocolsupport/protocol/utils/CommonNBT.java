@@ -3,26 +3,19 @@ package protocolsupport.protocol.utils;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
-import protocolsupport.api.ProtocolVersion;
-import protocolsupport.protocol.serializer.ItemStackSerializer;
 import protocolsupport.protocol.utils.networkentity.NetworkEntityType;
 import protocolsupport.protocol.utils.types.NetworkItemStack;
 import protocolsupport.protocol.utils.types.nbt.NBT;
 import protocolsupport.protocol.utils.types.nbt.NBTByte;
 import protocolsupport.protocol.utils.types.nbt.NBTCompound;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.protocol.utils.types.nbt.NBTShort;
 
 public class CommonNBT {
 
 	public static final String DISPLAY = "display";
 	public static final String DISPLAY_NAME = "Name";
 	public static final String DISPLAY_LORE = "Lore";
-	public static final String DAMAGE = "Damage";
-	public static final String NBT_STASH = "PS_NBT_STASH";
-	public static final String ID_STASH = "PS_ID_STASH";
 
 	public static NBTCompound getOrCreateRootTag(NetworkItemStack itemstack) {
 		NBTCompound tag = itemstack.getNBT();
@@ -40,17 +33,6 @@ public class CommonNBT {
 			rootTag.setTag(DISPLAY, display);
 		}
 		return display;
-	}
-
-	public static NBTCompound createItemNBT(NetworkItemStack itemStack) {
-		NBTCompound itemNBT = new NBTCompound();
-		itemNBT.setTag("id", new NBTShort((short) itemStack.getTypeId()));
-		itemNBT.setTag("Count", new NBTByte((byte) itemStack.getAmount()));
-		itemNBT.setTag("Damage", new NBTShort((byte) itemStack.getLegacyData()));
-		if (itemStack.getNBT() != null) {
-			itemNBT.setTag("tag", itemStack.getNBT());
-		}
-		return itemNBT;
 	}
 
 	public static final String BOOK_ENCHANTMENTS = "StoredEnchantments";
@@ -93,18 +75,6 @@ public class CommonNBT {
 			compound.setTag("tag", itemstacknbt);
 		}
 		return compound;
-	}
-
-	public static NBTCompound serializeItemStackToPENBT(ProtocolVersion version, String locale, NetworkItemStack itemstack) {
-		NBTCompound item = new NBTCompound();
-		itemstack = ItemStackSerializer.remapItemToClient(version, locale, itemstack.cloneItemStack());
-		item.setTag("Count", new NBTByte((byte) itemstack.getAmount()));
-		item.setTag("Damage", new NBTShort((short) itemstack.getLegacyData()));
-		item.setTag("id", new NBTShort((short) itemstack.getTypeId()));
-		if ((itemstack.getNBT() != null)) {
-			item.setTag("tag", itemstack.getNBT());
-		}
-		return item;
 	}
 
 	public static String deserializeBlockDataFromNBT(NBTCompound compound) {

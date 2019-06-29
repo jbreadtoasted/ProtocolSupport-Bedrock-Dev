@@ -46,9 +46,11 @@ public abstract class MiddleEntitySetAttributes extends MiddleEntity {
 				attr.value = 0.00000001;
 			}
 		}
-		Attribute attr = attributes.get("generic.maxHealth");
-		if ((attr != null) && (cache.getWatchedEntityCache().getWatchedEntity(entityId) != null)) {
-			cache.getWatchedEntityCache().getWatchedEntity(entityId).getDataCache().setMaxHealth((float) attr.value);
+		if (entityId == cache.getWatchedEntityCache().getSelfPlayerEntityId()) {
+			Attribute attr = attributes.get("generic.maxHealth");
+			if (attr != null) {
+				cache.getAttributesCache().setMaxHealth((float) attr.value);
+			}
 		}
 		return true;
 	}

@@ -4,7 +4,6 @@ import protocolsupport.protocol.utils.types.nbt.NBTCompound;
 import protocolsupport.protocol.utils.types.nbt.NBTInt;
 import protocolsupport.protocol.utils.types.nbt.NBTString;
 import protocolsupport.protocol.utils.types.nbt.NBTType;
-import protocolsupport.utils.Utils;
 
 public class TileEntity {
 
@@ -38,11 +37,6 @@ public class TileEntity {
 
 	public NBTCompound getNBT() {
 		return nbt;
-	}
-
-	@Override
-	public String toString() {
-		return Utils.toStringAllFields(this);
 	}
 
 }

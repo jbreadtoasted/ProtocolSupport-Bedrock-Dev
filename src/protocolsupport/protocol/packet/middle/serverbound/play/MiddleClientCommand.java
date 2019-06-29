@@ -28,7 +28,7 @@ public abstract class MiddleClientCommand extends ServerBoundMiddlePacket {
 		}
 	}
 
-	public enum Command {
+	protected static enum Command {
 		REQUEST_RESPAWN, GET_STATS
 	}
 

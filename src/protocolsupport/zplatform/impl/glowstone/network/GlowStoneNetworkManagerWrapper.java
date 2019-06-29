@@ -37,10 +37,6 @@
 //		return session.getChannel().attr(packet_listener_key).get();
 //	}
 //
-//	public static GlowStoneNetworkManagerWrapper getFromChannel(Channel channel) {
-//		return new GlowStoneNetworkManagerWrapper((MessageHandler) channel.pipeline().get(GlowStoneChannelHandlers.NETWORK_MANAGER));
-//	}
-//
 //	private final MessageHandler handler;
 //	public GlowStoneNetworkManagerWrapper(MessageHandler handler) {
 //		this.handler = handler;
@@ -53,16 +49,6 @@
 //	@Override
 //	public Object unwrap() {
 //		return handler;
-//	}
-//
-//	public NetworkState getProtocol() {
-//		AbstractProtocol proto = getSession().getProtocol();
-//		for (ProtocolType type : ProtocolType.values()) {
-//			if (type.getProtocol() == proto) {
-//				return GlowStoneMiscUtils.protocolToNetState(type);
-//			}
-//		}
-//		throw new IllegalStateException(MessageFormat.format("Unkown protocol {0}", proto));
 //	}
 //
 //	@Override
@@ -100,10 +86,9 @@
 //		getSession().send((Message) packet);
 //	}
 //
-//	@SuppressWarnings("unchecked")
 //	@Override
-//	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener, GenericFutureListener<? extends Future<? super Void>>... futureListeners) {
-//		getSession().sendWithFuture((Message) packet).addListener(genericListener).addListeners(futureListeners);
+//	public void sendPacket(Object packet, GenericFutureListener<? extends Future<? super Void>> genericListener) {
+//		getSession().sendWithFuture((Message) packet).addListener(genericListener);
 //	}
 //
 //	@Override

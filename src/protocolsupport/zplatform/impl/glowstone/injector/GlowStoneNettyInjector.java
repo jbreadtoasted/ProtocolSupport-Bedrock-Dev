@@ -7,7 +7,6 @@
 //import org.bukkit.plugin.java.JavaPlugin;
 //
 //import io.netty.channel.Channel;
-//import io.netty.channel.EventLoopGroup;
 //import net.glowstone.GlowServer;
 //import net.glowstone.net.GameServer;
 //import protocolsupport.ProtocolSupport;
@@ -15,10 +14,6 @@
 //import protocolsupport.zplatform.impl.glowstone.GlowStoneMiscUtils;
 //
 //public class GlowStoneNettyInjector {
-//
-//	private static GameServer getGameServer() throws IllegalArgumentException, IllegalAccessException, InterruptedException {
-//		return getWithWait(ReflectionUtils.getField(GlowServer.class, "networkServer"), GlowStoneMiscUtils.getServer());
-//	}
 //
 //	private static final CountDownLatch injectFinishedLatch = new CountDownLatch(1);
 //
@@ -33,8 +28,10 @@
 //		});
 //		new Thread(() -> {
 //			try {
+//				GlowServer server = GlowStoneMiscUtils.getServer();
 //				//TODO: PR some sort of channel created signal to GlowStone
-//				Channel channel = getWithWait(ReflectionUtils.getField(GameServer.class, "channel"), getGameServer());
+//				GameServer gameserver = getWithWait(ReflectionUtils.getField(GlowServer.class, "networkServer"), server);
+//				Channel channel = getWithWait(ReflectionUtils.getField(GameServer.class, "channel"), gameserver);
 //				channel.pipeline().addFirst(new GlowStoneNettyServerChannelHandler());
 //				Bukkit.getOnlinePlayers().forEach(player -> player.kickPlayer("Channel reset"));
 //			} catch (IllegalArgumentException | IllegalAccessException | InterruptedException e) {
@@ -43,14 +40,6 @@
 //			}
 //			injectFinishedLatch.countDown();
 //		}).start();
-//	}
-//
-//	public static EventLoopGroup getServerEventLoop() {
-//		try {
-//			return (EventLoopGroup) ReflectionUtils.getField(GameServer.class, "workerGroup").get(getGameServer());
-//		} catch (IllegalArgumentException | IllegalAccessException | InterruptedException e) {
-//			throw new RuntimeException("unable to get event loop", e);
-//		}
 //	}
 //
 //	@SuppressWarnings("unchecked")

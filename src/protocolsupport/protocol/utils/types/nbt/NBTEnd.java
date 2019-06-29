@@ -19,9 +19,4 @@ public class NBTEnd extends NBT {
 		return 0;
 	}
 
-	@Override
-	public NBTEnd clone() {
-		return this;
-	}
-
 }

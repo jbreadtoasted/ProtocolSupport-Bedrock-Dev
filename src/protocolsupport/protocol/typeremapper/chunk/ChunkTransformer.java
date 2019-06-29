@@ -15,7 +15,6 @@ import protocolsupport.protocol.utils.minecraftdata.MinecraftData;
 import protocolsupport.protocol.utils.types.ChunkCoord;
 import protocolsupport.protocol.utils.types.Position;
 import protocolsupport.protocol.utils.types.TileEntity;
-import protocolsupport.utils.Utils;
 
 public abstract class ChunkTransformer {
 
@@ -118,11 +117,6 @@ public abstract class ChunkTransformer {
 			}
 		}
 
-	}
-
-	@Override
-	public String toString() {
-		return Utils.toStringAllFields(this);
 	}
 
 }
