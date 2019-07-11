@@ -33,7 +33,7 @@ Ensure you have a suitable Java 8 JDK!
 2. Open a command prompt window of any sort
 3. Go into the downloaded github repo folder
 4:
-On Windows: run `./gradlew.bat jar`    
+On Windows: run `gradlew.bat jar`    
 On MacOS / Linun run: `./gradlew jar`    
 5. If all succeeds the final jar will be in a new folder called `target`. If this file is small <10mb in size the build failed. Open an issue report then
 
