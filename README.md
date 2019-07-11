@@ -25,6 +25,18 @@ Known wontfix issues:
 * [1.6 and earlier] Stats are not sent
 * [1.4.7] Server shows up as "incompatible" in the server list, impossible to fix due to the lack of an way to verify the client version during server list ping
 
+### Compiling:
+
+Ensure you have a suitable Java 8 JDK!
+
+1. Download / clone the repo
+2. Open a command prompt window of any sort
+3. Go into the downloaded github repo folder
+4:
+On Windows: run `./gradlew.bat jar`    
+On MacOS / Linun run: `./gradlew jar`    
+5. If all succeeds the final jar will be in a new folder called `target`. If this file is small <10mb in size the build failed. Open an issue report then
+
 ---
 
 Website: http://protocolsupport.true-games.org/
