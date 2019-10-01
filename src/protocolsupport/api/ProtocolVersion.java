@@ -14,6 +14,7 @@ import protocolsupportbuildprocessor.Preload;
 public enum ProtocolVersion {
 
 	MINECRAFT_FUTURE(-1, new OrderId(ProtocolType.PC, 23)),
+	MINECRAFT_1_13_2(404, new OrderId(ProtocolType.PC, 24), "1.14.4"),
 	MINECRAFT_1_13_2(404, new OrderId(ProtocolType.PC, 22), "1.13.2"),
 	MINECRAFT_1_13_1(401, new OrderId(ProtocolType.PC, 21), "1.13.1"),
 	MINECRAFT_1_13(393, new OrderId(ProtocolType.PC, 20), "1.13"),
@@ -38,6 +39,7 @@ public enum ProtocolVersion {
 	MINECRAFT_1_4_7(51, new OrderId(ProtocolType.PC, 1), "1.4.7"),
 	MINECRAFT_LEGACY(-1, new OrderId(ProtocolType.PC, 0)),
 	MINECRAFT_PE_FUTURE(-1, new OrderId(ProtocolType.PE, 6)),
+	MINECRAFT_PE_1_12_1(361, new OrderId(ProtocolType.PE, 25), "PE-1.12.1"),
 	MINECRAFT_PE_1_12(361, new OrderId(ProtocolType.PE, 5), "PE-1.12.0"),
 	MINECRAFT_PE_1_11(354, new OrderId(ProtocolType.PE, 4), "PE-1.11.0"),
 	MINECRAFT_PE_1_10(340, new OrderId(ProtocolType.PE, 3), "PE-1.10.0"),
